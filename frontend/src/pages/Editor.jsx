@@ -1,60 +1,59 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import api from "../api/axiosInstance";
-import { socket } from "../sockets/socket";
+import { useParams } from "react-router-dom";
 
 export default function Editor() {
-  const { id } = useParams(); // storyId
-  const [content, setContent] = useState("");
-  const [suggestion, setSuggestion] = useState("");
+  const { id } = useParams();
+  const [story, setStory] = useState("");
+  const [suggestion, setSuggestion] = useState("Waiting for suggestion...");
 
-  const loadStory = async () => {
+  // Fetch story
+  const fetchStory = async () => {
     const res = await api.get(`/stories/${id}`);
-    setContent(res.data.content);
+    setStory(res.data.content);
+  };
+
+  // AI Suggestion  
+  const getSuggestion = async (text) => {
+    try {
+      setSuggestion("Thinking...");
+
+      const res = await api.post("/ai/suggest", { prompt: text });
+
+      setSuggestion(res.data.suggestion);
+    } catch (err) {
+      console.error("AI error:", err);
+      setSuggestion("AI failed to generate suggestion");
+    }
   };
 
   useEffect(() => {
-    loadStory();
-
-    socket.emit("story:join", { storyId: id });
-
-    socket.on("story:suggestion", (data) => {
-      setSuggestion(data.suggestion);
-    });
-
-    return () => {
-      socket.off("story:suggestion");
-    };
+    fetchStory();
   }, []);
 
-  // Send updates to server when typing
-  const handleChange = (e) => {
-    const text = e.target.value;
-    setContent(text);
-
-    socket.emit("story:update", { storyId: id, content: text });
-  };
-
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Editor</h2>
+    <div className="container mt-4">
+      {/* Editor Box */}
+      <div className="card p-4 shadow-sm mb-4" style={{ borderRadius: "12px" }}>
+        <h4>Editor</h4>
 
-      <textarea
-        value={content}
-        onChange={handleChange}
-        style={{ width: "100%", height: "300px", fontSize: "16px" }}
-      />
+        <textarea
+          className="form-control mt-3"
+          rows={12}
+          value={story}
+          onChange={(e) => {
+            setStory(e.target.value);
+            getSuggestion(e.target.value); // live suggestions
+          }}
+        />
+      </div>
 
-      <h3>AI Suggestion</h3>
-      <div
-        style={{
-          padding: "10px",
-          background: "#f4f4f4",
-          borderRadius: "5px",
-          minHeight: "100px",
-        }}
-      >
-        {suggestion || "Waiting for suggestion..."}
+      {/* Suggestion Box */}
+      <div className="card p-4 shadow-sm" style={{ borderRadius: "12px" }}>
+        <h4>AI Suggestion</h4>
+        <div className="mt-3 bg-light p-3 rounded">
+          {suggestion}
+        </div>
       </div>
     </div>
   );

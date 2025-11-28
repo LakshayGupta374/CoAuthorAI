@@ -27,18 +27,49 @@ export default function Register() {
   };
 
   return (
-    <div className="auth-box">
-      <h2>Create Account</h2>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card p-4 shadow-lg" style={{ width: "400px", borderRadius: "15px" }}>
+        <h3 className="text-center mb-3">Create Account</h3>
 
-      <input placeholder="Name" onChange={(e) => setName(e.target.value)} />
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <div className="mb-3">
+          <label className="form-label">Name</label>
+          <input
+            className="form-control"
+            placeholder="Enter your name"
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-      <button onClick={handleRegister}>Register</button>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            className="form-control"
+            placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            className="form-control"
+            type="password"
+            placeholder="Create password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button className="btn btn-success w-100" onClick={handleRegister}>
+          Register
+        </button>
+
+        <p className="text-center mt-3">
+          Already have an account?{" "}
+          <a href="/login" className="text-primary">
+            Login
+          </a>
+        </p>
+      </div>
     </div>
   );
 }

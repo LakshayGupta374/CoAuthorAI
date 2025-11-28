@@ -16,22 +16,45 @@ export default function Login() {
       login(res.data);
       navigate("/");
     } catch (err) {
-      alert("Invalid credentials");
+      alert("Invalid login credentials");
     }
   };
 
   return (
-    <div className="auth-box">
-      <h2>Login</h2>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
+      <div className="card p-4 shadow-lg" style={{ width: "380px", borderRadius: "15px" }}>
+        <h3 className="text-center mb-3">Login</h3>
 
-      <input placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            className="form-control"
+            placeholder="Enter your email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <button onClick={handleLogin}>Login</button>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            className="form-control"
+            type="password"
+            placeholder="Enter password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+
+        <button className="btn btn-primary w-100" onClick={handleLogin}>
+          Login
+        </button>
+
+        <p className="text-center mt-3">
+          Don’t have an account?{" "}
+          <a href="/register" className="text-primary">
+            Register
+          </a>
+        </p>
+      </div>
     </div>
   );
 }
