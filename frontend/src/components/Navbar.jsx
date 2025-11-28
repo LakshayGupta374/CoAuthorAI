@@ -7,45 +7,45 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   return (
-    <nav style={{ padding: "10px", background: "#222", color: "white" }}>
-      <h2 style={{ display: "inline-block", marginRight: "20px" }}>
-        Co-Author AI
-      </h2>
+    <nav className="navbar navbar-dark bg-dark px-4 shadow-sm">
+      <Link to="/" className="navbar-brand fw-bold fs-4">
+        ✍️ Co-Author AI
+      </Link>
 
-      <div style={{ float: "right", display: "flex", gap: "20px" }}>
-        {!user && (
+      <div>
+        {user ? (
           <>
-            <Link to="/login" style={{ color: "white" }}>
-              Login
-            </Link>
-
-            <Link to="/register" style={{ color: "white" }}>
-              Register
-            </Link>
-          </>
-        )}
-
-        {user && (
-          <>
-            <Link to="/" style={{ color: "white" }}>
+            <Link
+              to="/"
+              className="btn btn-outline-light me-2 rounded-pill px-3"
+            >
               Dashboard
             </Link>
 
             <button
+              className="btn btn-danger rounded-pill px-3"
               onClick={() => {
                 logout();
                 navigate("/login");
               }}
-              style={{
-                background: "white",
-                color: "black",
-                border: "none",
-                padding: "5px 10px",
-                cursor: "pointer",
-              }}
             >
               Logout
             </button>
+          </>
+        ) : (
+          <>
+            <Link
+              to="/login"
+              className="btn btn-outline-light me-2 rounded-pill px-3"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="btn btn-primary rounded-pill px-3"
+            >
+              Register
+            </Link>
           </>
         )}
       </div>
